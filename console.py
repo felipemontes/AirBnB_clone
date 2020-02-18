@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+'''HBNBCommand Modules'''
 import cmd
 from shlex import split
 from models import storage
@@ -24,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         '''Quit command to exit the program\n'''
         return True
 
-    def do_EOF(self):
+    def do_EOF(self, arg):
         '''End of file'''
         return True
 
