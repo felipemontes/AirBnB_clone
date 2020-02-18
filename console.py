@@ -19,7 +19,7 @@ d_classes = {'BaseModel': BaseModel, 'User': User,
 
 class HBNBCommand(cmd.Cmd):
     '''Console'''
-    prompt = '(hbtn) '
+    prompt = '(hbnb) '
 
     def do_quit(self, arg):
         '''Quit command to exit the program\n'''
