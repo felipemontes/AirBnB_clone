@@ -1,53 +1,54 @@
 #!/usr/bin/python3
+'''HBNBCommand Modules'''
 import cmd
 from shlex import split
-from models.base_model import BaseModel
 from models import storage
+from models.base_model import BaseModel
 from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
+from models.place import Place
 from models.review import Review
+
 d_classes = {'BaseModel': BaseModel, 'User': User,
-               'Place': Place, 'State': State,
-               'City': City, 'Amenity': Amenity, 'Review': Review}
+             'State': State, 'City': City,
+             'Amenity': Amenity, 'Place': Place,
+             'Review': Review}
+
 
 class HBNBCommand(cmd.Cmd):
-    prompt = '(hbnb)'
+    '''Console'''
+    prompt = '(hbnb) '
 
     def do_quit(self, arg):
-        ''' Quit command to exit the program\n '''
+        '''Quit command to exit the program\n'''
         return True
 
-    def do_EOF(self):
-        ''' End of file'''
+    def do_EOF(self, arg):
+        '''End of file'''
         return True
-
-    def emptyline(self):
-        pass
 
     def do_create(self, arg):
+        '''Creates a new instance of a class'''
         if not arg:
             print("** class name missing **")
-            return
-
-        for k, v in d_classes.items():
-            if arg not in list(d_classes):
+        else:
+            if arg not in d_classes:
                 print("** class doesn't exist **")
-
             else:
                 attr = d_classes[arg]()
                 print(attr.id)
                 attr.save()
 
     def do_show(self, arg):
-        '''Comment'''
+        '''String representation of an instance based on the
+           class name and id
+        '''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
-            return
-        if spl[0] not in d_classes:
+        elif spl[0] not in d_classes:
             print("** class doesn't exist **")
         else:
             if len(spl) == 1:
@@ -60,12 +61,11 @@ class HBNBCommand(cmd.Cmd):
                     print('** no instance found **')
 
     def do_destroy(self, arg):
-        '''Comment'''
+        '''Deletes an instance based on the class name and id'''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
-            return
-        if spl[0] not in d_classes:
+        elif spl[0] not in d_classes:
             print("** class doesn't exist **")
         else:
             if len(spl) == 1:
@@ -79,18 +79,27 @@ class HBNBCommand(cmd.Cmd):
                     print('** no instance found **')
 
     def do_all(self, arg):
-        ''' Prints all string representation of all instances '''
+        '''Prints all string representation of all instances
+           based or not on the class name
+        '''
         spl = split(arg)
-        newlist = []
-        if len(spl) == 0 or spl[0] not in d_classes:
+        l_objs = []
+        if not arg:
+            for v in storage.all().values():
+                l_objs.append(v.__str__())
+            print(l_objs)
+        elif spl[0] not in d_classes:
             print("** class doesn't exist **")
         else:
-            for v in storage.all().values():
-                    newlist.append(v.__str__())
-            print (newlist)
+            for k, v in storage.all().items():
+                if v.__class__ == eval(spl[0]):
+                    l_objs.append(v.__str__())
+            print(l_objs)
 
-    def update(self, arg):
-        ''' Updates an instance based on the class name and id '''
+    def do_update(self, arg):
+        '''Updates an instance based on the class name
+           and id by adding or updating attribute
+        '''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
@@ -103,10 +112,19 @@ class HBNBCommand(cmd.Cmd):
             if key not in storage.all():
                 print('** no instance found **')
             elif len(spl) == 2:
+                print('** attribute name missing **')
+            elif len(spl) == 3:
                 print('** value missing **')
             else:
                 for k, v in storage.all().items():
                     setattr(storage.all()[key], spl[2], spl[3])
+                    storage.save()
+                return
+
+    def emptyline(self):
+        '''Nothing happens when there is a blank line'''
+        pass
 
 if __name__ == '__main__':
+    '''Console loop'''
     HBNBCommand().cmdloop()
