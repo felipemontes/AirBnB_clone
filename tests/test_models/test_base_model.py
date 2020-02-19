@@ -3,6 +3,7 @@
 
 import unittest
 import os
+import pep8
 from models.base_model import BaseModel
 from datetime import datetime
 
@@ -28,10 +29,17 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(self.my_model.my_number, my_model_json['my_number'])
 
     def testInstances(self):
-        '''comment'''
+        '''Tests for if it's an instance'''
         self.assertIsInstance(self.my_model.id, str)
         self.assertIsInstance(self.my_model.created_at, datetime)
         self.assertIsInstance(self.my_model.updated_at, datetime)
+
+    def test_pep8_conformance(self):
+        """Test that we conform to PEP8."""
+        pep8style = pep8.StyleGuide(quiet=True)
+        result = pep8style.check_files(['models/base_model.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
 
 if __name__ == '__main__':
     '''Main initializer'''
