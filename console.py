@@ -84,11 +84,16 @@ class HBNBCommand(cmd.Cmd):
         '''
         spl = split(arg)
         l_objs = []
-        if arg == "" or spl[0] not in d_classes:
-            print("** class doesn't exist **")
-        else:
+        if not arg:
             for v in storage.all().values():
                 l_objs.append(v.__str__())
+            print(l_objs)
+        elif spl[0] not in d_classes:
+            print("** class doesn't exist **")
+        else:
+            for k, v in storage.all().items():
+                if v.__class__ == eval(spl[0]):
+                    l_objs.append(v.__str__())
             print(l_objs)
 
     def do_update(self, arg):
