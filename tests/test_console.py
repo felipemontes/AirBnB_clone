@@ -5,7 +5,7 @@ import unittest
 import pep8
 
 
-def TestConsole(unittest.TestCase):
+class TestConsole(unittest.TestCase):
     '''Unittest for console'''
 
     def test_pep8_conformance(self):
@@ -16,4 +16,5 @@ def TestConsole(unittest.TestCase):
                          "Found code style errors (and warnings).")
 
 if __name__ == '__main__':
+    '''Main initializer'''
     unittest.main()
