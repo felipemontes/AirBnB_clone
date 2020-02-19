@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+''' Console Modules '''
 import cmd
 from shlex import split
 from models.base_model import BaseModel
@@ -9,25 +10,30 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+
 d_classes = {'BaseModel': BaseModel, 'User': User,
-               'Place': Place, 'State': State,
-               'City': City, 'Amenity': Amenity, 'Review': Review}
+             'Place': Place, 'State': State,
+             'City': City, 'Amenity': Amenity, 'Review': Review}
+
 
 class HBNBCommand(cmd.Cmd):
+    ''' HBNB Class '''
     prompt = '(hbnb)'
 
     def do_quit(self, arg):
         ''' Quit command to exit the program\n '''
         return True
 
-    def do_EOF(self):
+    def do_EOF(self, arg):
         ''' End of file'''
         return True
 
     def emptyline(self):
+        ''' Ignores empty lines '''
         pass
 
     def do_create(self, arg):
+        ''' Create a new instance of a class'''
         if not arg:
             print("** class name missing **")
             return
@@ -42,7 +48,8 @@ class HBNBCommand(cmd.Cmd):
                 attr.save()
 
     def do_show(self, arg):
-        '''Comment'''
+        ''' String representation of an instance
+        based on the class name and id'''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
@@ -60,7 +67,7 @@ class HBNBCommand(cmd.Cmd):
                     print('** no instance found **')
 
     def do_destroy(self, arg):
-        '''Comment'''
+        ''' Deletes an instance based on the class name and id'''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
@@ -79,15 +86,22 @@ class HBNBCommand(cmd.Cmd):
                     print('** no instance found **')
 
     def do_all(self, arg):
-        ''' Prints all string representation of all instances '''
+        '''Prints all string representation of all instances
+           based or not on the class name
+        '''
         spl = split(arg)
-        newlist = []
-        if len(spl) == 0 or spl[0] not in d_classes:
+        l_objs = []
+        if not arg:
+            for v in storage.all().values():
+                l_objs.append(v.__str__())
+            print(l_objs)
+        elif spl[0] not in d_classes:
             print("** class doesn't exist **")
         else:
-            for v in storage.all().values():
-                    newlist.append(v.__str__())
-            print (newlist)
+            for k, v in storage.all().items():
+                if v.__class__ == eval(spl[0]):
+                    l_objs.append(v.__str__())
+            print(l_objs)
 
     def update(self, arg):
         ''' Updates an instance based on the class name and id '''
@@ -109,4 +123,5 @@ class HBNBCommand(cmd.Cmd):
                     setattr(storage.all()[key], spl[2], spl[3])
 
 if __name__ == '__main__':
+    ''' console loop '''
     HBNBCommand().cmdloop()
