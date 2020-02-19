@@ -1,8 +1,14 @@
 #!/usr/bin/python3
-""" Unittest for Storage """
+""" Unittest FileStorage """
 import unittest
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.engine.file_storage import FileStorage
 import os
 
@@ -18,6 +24,12 @@ class TestFileStorage(unittest.TestCase):
             pass
         FileStorage._FileStorage__objects = {}
 
+    def test_exist(self):
+        """ checks if the class exist """
+        obj = BaseModel()
+        self.assertEqual(str(type(obj)),
+                         "<class 'models.base_model.BaseModel'>")
+
     def test_empty(self):
         """ Test empty file """
         self.assertEqual(storage.all(), {})
@@ -25,8 +37,50 @@ class TestFileStorage(unittest.TestCase):
     def test_create_basemodel(self):
         """ Test create basemodel"""
         obj = BaseModel()
-        name = obj.__class__.__name__ + '.' + obj.id
-        dic = {name: obj}
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_user(self):
+        """ Test create User """
+        obj = User()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_city(self):
+        """ Test create User """
+        obj = City()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_amenity(self):
+        """ Test create User """
+        obj = Amenity()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_place(self):
+        """ Test create User """
+        obj = Place()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_review(self):
+        """ Test create User """
+        obj = Review()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_state(self):
+        """ Test create User """
+        obj = State()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_input_1(self):
@@ -41,5 +95,5 @@ class TestFileStorage(unittest.TestCase):
             storage.new(obj, obj)
 
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     unittest.main()
