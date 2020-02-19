@@ -32,3 +32,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.my_model.id, str)
         self.assertIsInstance(self.my_model.created_at, datetime)
         self.assertIsInstance(self.my_model.updated_at, datetime)
+
+if __name__ == '__main__':
+    '''Main initializer'''
+    unittest.main()
