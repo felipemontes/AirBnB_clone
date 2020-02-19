@@ -29,7 +29,7 @@ class HBNBCommand(cmd.Cmd):
         '''End of file'''
         return True
 
-  def do_create(self, arg):
+    def do_create(self, arg):
         ''' Create a new instance of a class'''
         if not arg:
             print("** class name missing **")
