@@ -122,7 +122,7 @@ class HBNBCommand(cmd.Cmd):
                 return
 
     def emptyline(self):
-        '''Nothing happens when there is a blank line'''
+        '''Nothing happens when there are blank lines'''
         pass
 
 if __name__ == '__main__':
