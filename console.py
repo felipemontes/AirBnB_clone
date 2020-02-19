@@ -29,8 +29,8 @@ class HBNBCommand(cmd.Cmd):
         '''End of file'''
         return True
 
-    def do_create(self, arg):
-        '''Creates a new instance of a class'''
+  def do_create(self, arg):
+        ''' Create a new instance of a class'''
         if not arg:
             print("** class name missing **")
         else:
@@ -44,7 +44,6 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         '''String representation of an instance based on the
            class name and id
-        '''
         spl = split(arg)
         if not arg:
             print("** class name missing **")
