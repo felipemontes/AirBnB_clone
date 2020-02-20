@@ -10,6 +10,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.engine.file_storage import FileStorage
+from datetime import datetime
 import json
 import os
 import pep8
@@ -64,35 +65,35 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(storage.all(), dic)
 
     def test_create_city(self):
-        """ Test create User """
+        """ Test create City """
         obj = City()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_amenity(self):
-        """ Test create User """
+        """ Test create Amenity """
         obj = Amenity()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_place(self):
-        """ Test create User """
+        """ Test create Place """
         obj = Place()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_review(self):
-        """ Test create User """
+        """ Test create Review """
         obj = Review()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_state(self):
-        """ Test create User """
+        """ Test create State """
         obj = State()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
@@ -136,9 +137,10 @@ class TestFileStorage(unittest.TestCase):
         all_objs = storage.all()
 
         key = dic1['__class__'] + "." + dic1['id']
-        self.assertEqual(key in all_objs, False)
+        self.assertEqual(key in all_objs, True)
 
     def test_basemodel(self):
+        ''' Test BaseModel'''
         self.obj.my_name = "Betty"
         self.obj.save()
         dic1 = self.obj.to_dict()
@@ -146,7 +148,7 @@ class TestFileStorage(unittest.TestCase):
 
         key = dic1['__class__'] + "." + dic1['id']
 
-        self.assertEqual(key in all_objs, False)
+        self.assertEqual(key in all_objs, True)
         self.assertEqual(dic1['my_name'], "Betty")
 
         create1 = dic1['created_at']
@@ -157,7 +159,7 @@ class TestFileStorage(unittest.TestCase):
         dic2 = self.obj.to_dict()
         all_objs = storage.all()
 
-        self.assertEqual(key in all_objs, False)
+        self.assertEqual(key in all_objs, True)
 
         create2 = dic2['created_at']
         update2 = dic2['updated_at']
@@ -165,6 +167,17 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(create1, create2)
         self.assertNotEqual(update1, update2)
         self.assertEqual(dic2['my_name'], "Holberton")
+
+    def test_basemodel1(self):
+        '''Test for BaseModel'''
+        dict1 = self.obj.to_dict()
+        key = self.obj.__class__.__name__ + '.' + self.obj.id
+        storage.save()
+        with open("file.json", 'r') as f:
+            dict2 = json.load(f)
+        new = dict2[key]
+        for k in new:
+            self.assertEqual(dict1[k], new[k])
 
     def test_pep8_conformance(self):
         """Test that we conform to PEP8."""
@@ -174,4 +187,5 @@ class TestFileStorage(unittest.TestCase):
                          "Found code style errors (and warnings).")
 
 if __name__ == "__main__":
+    '''Main Initializer'''
     unittest.main()
