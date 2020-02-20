@@ -3,13 +3,8 @@
 import unittest
 from models import storage
 from models.base_model import BaseModel
-from models.user import User
-from models.city import City
-from models.amenity import Amenity
-from models.place import Place
-from models.review import Review
-from models.state import State
 from models.engine.file_storage import FileStorage
+from datetime import datetime
 import json
 import os
 import pep8
@@ -71,6 +66,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(key in all_objs, True)
 
     def test_basemodel(self):
+        ''' Test BaseModel'''
         self.obj.my_name = "Betty"
         self.obj.save()
         dic1 = self.obj.to_dict()
@@ -117,4 +113,5 @@ class TestFileStorage(unittest.TestCase):
                          "Found code style errors (and warnings).")
 
 if __name__ == "__main__":
+    '''Main Initializer'''
     unittest.main()
