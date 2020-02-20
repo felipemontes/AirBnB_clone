@@ -64,35 +64,35 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(storage.all(), dic)
 
     def test_create_city(self):
-        """ Test create User """
+        """ Test create City """
         obj = City()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_amenity(self):
-        """ Test create User """
+        """ Test create Amenity """
         obj = Amenity()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_place(self):
-        """ Test create User """
+        """ Test create Place """
         obj = Place()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_review(self):
-        """ Test create User """
+        """ Test create Review """
         obj = Review()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
         self.assertEqual(storage.all(), dic)
 
     def test_create_state(self):
-        """ Test create User """
+        """ Test create State """
         obj = State()
         key = obj.__class__.__name__ + '.' + obj.id
         dic = {key: obj}
