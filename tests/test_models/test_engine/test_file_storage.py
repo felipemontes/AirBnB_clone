@@ -21,7 +21,7 @@ class TestFileStorage(unittest.TestCase):
     obj = BaseModel()
 
     def setUp(self):
-        """ Sets up methods"""
+        """ Sets up all methods"""
         try:
             os.remove("file.json")
         except:
