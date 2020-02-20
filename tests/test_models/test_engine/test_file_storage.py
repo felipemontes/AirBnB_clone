@@ -10,6 +10,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.engine.file_storage import FileStorage
+import json
 import os
 import pep8
 
@@ -20,12 +21,23 @@ class TestFileStorage(unittest.TestCase):
     obj = BaseModel()
 
     def setUp(self):
-        """ remove the file """
+        """ Sets up methods"""
         try:
             os.remove("file.json")
         except:
             pass
         FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Removes the file """
+        try:
+            os.remove("file.json")
+        except:
+            pass
+
+    def testIsInstance(self):
+        """ Checks if it's an instance """
+        self.assertIsInstance(storage, FileStorage)
 
     def test_exist(self):
         """ checks if the class exist """
@@ -116,13 +128,50 @@ class TestFileStorage(unittest.TestCase):
 
         self.assertEqual(str(e.exception), err)
 
+    def test_save_key(self):
+        ''' Test to check save method '''
+        self.obj.full_name = "BaseModel Instance"
+        self.obj.save()
+        dic1 = self.obj.to_dict()
+        all_objs = storage.all()
+
+        key = dic1['__class__'] + "." + dic1['id']
+        self.assertEqual(key in all_objs, False)
+
+    def test_basemodel(self):
+        self.obj.my_name = "Betty"
+        self.obj.save()
+        dic1 = self.obj.to_dict()
+        all_objs = storage.all()
+
+        key = dic1['__class__'] + "." + dic1['id']
+
+        self.assertEqual(key in all_objs, False)
+        self.assertEqual(dic1['my_name'], "Betty")
+
+        create1 = dic1['created_at']
+        update1 = dic1['updated_at']
+
+        self.obj.my_name = "Holberton"
+        self.obj.save()
+        dic2 = self.obj.to_dict()
+        all_objs = storage.all()
+
+        self.assertEqual(key in all_objs, False)
+
+        create2 = dic2['created_at']
+        update2 = dic2['updated_at']
+
+        self.assertEqual(create1, create2)
+        self.assertNotEqual(update1, update2)
+        self.assertEqual(dic2['my_name'], "Holberton")
+
     def test_pep8_conformance(self):
         """Test that we conform to PEP8."""
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/engine/file_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
-
 
 if __name__ == "__main__":
     unittest.main()
