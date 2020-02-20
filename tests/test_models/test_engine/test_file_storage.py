@@ -3,6 +3,12 @@
 import unittest
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.engine.file_storage import FileStorage
 from datetime import datetime
 import json
@@ -14,6 +20,21 @@ class TestFileStorage(unittest.TestCase):
     """ Test cases for FileStorage"""
 
     obj = BaseModel()
+
+    def setUp(self):
+        """ Sets up all methods"""
+        try:
+            os.remove("file.json")
+        except:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Removes the file """
+        try:
+            os.remove("file.json")
+        except:
+            pass
 
     def testIsInstance(self):
         """ Checks if it's an instance """
