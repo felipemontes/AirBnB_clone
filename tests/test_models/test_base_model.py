@@ -5,6 +5,7 @@ import unittest
 import os
 import pep8
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 from datetime import datetime
 
 
@@ -12,6 +13,28 @@ class TestBaseModel(unittest.TestCase):
     '''Unittest for BaseModel'''
 
     my_model = BaseModel()
+
+    def setUp(self):
+        '''Sets up methods'''
+        try:
+            os.remove("file.json")
+        except:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        '''Resets file.json'''
+        try:
+            os.remove("file.json")
+        except:
+            pass
+
+    def testArgs(self):
+        '''No arguments'''
+        with self.assertRaises(TypeError) as e:
+            BaseModel.__init__()
+        msg = "__init__() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), msg)
 
     def testPass(self):
         '''Tests for attributes'''
@@ -28,6 +51,11 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(self.my_model.name, my_model_json['name'])
         self.assertEqual(self.my_model.my_number, my_model_json['my_number'])
 
+    def test_exist(self):
+        '''Tests if the class exists'''
+        self.assertEqual(str(type(self.my_model)),
+                         "<class 'models.base_model.BaseModel'>")
+
     def testInstances(self):
         '''Tests for if it's an instance'''
         self.assertIsInstance(self.my_model.id, str)
@@ -35,7 +63,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.my_model.updated_at, datetime)
 
     def test_pep8_conformance(self):
-        """Test that we conform to PEP8."""
+        '''Test that we conform to PEP8.'''
         pep8style = pep8.StyleGuide(quiet=True)
         result = pep8style.check_files(['models/base_model.py'])
         self.assertEqual(result.total_errors, 0,
