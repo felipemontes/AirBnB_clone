@@ -17,6 +17,8 @@ import pep8
 class TestFileStorage(unittest.TestCase):
     """ Test cases for FileStorage"""
 
+    obj = BaseModel()
+
     def setUp(self):
         """ remove the file """
         try:
@@ -94,6 +96,25 @@ class TestFileStorage(unittest.TestCase):
         obj = BaseModel()
         with self.assertRaises(TypeError):
             storage.new(obj, obj)
+
+    def test_path(self):
+        ''' test the file path '''
+        self.assertEqual(hasattr(FileStorage, '_FileStorage__file_path'), True)
+        self.assertEqual(hasattr(FileStorage, '_FileStorage__objects'), True)
+
+    def test_save(self):
+        ''' test save '''
+        self.obj.save()
+        self.assertEqual(os.path.exists(storage._FileStorage__file_path), True)
+        self.assertEqual(storage.all(), storage._FileStorage__objects)
+
+    def test_save_self(self):
+        ''' test save self'''
+        err = "save() takes 1 positional argument but 2 were given"
+        with self.assertRaises(TypeError) as e:
+            FileStorage.save(self, 100)
+
+        self.assertEqual(str(e.exception), err)
 
     def test_pep8_conformance(self):
         """Test that we conform to PEP8."""
