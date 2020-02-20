@@ -56,6 +56,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(str(type(self.my_model)),
                          "<class 'models.base_model.BaseModel'>")
 
+    def test_id(self):
+        ''' Test to check the id '''
+        objs = []
+        for i in range(10):
+            objs.append(BaseModel().id)
+        self.assertEqual(len(objs), len(set(objs)))
+
     def testInstances(self):
         '''Tests for if it's an instance'''
         self.assertIsInstance(self.my_model.id, str)
