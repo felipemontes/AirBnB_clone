@@ -63,12 +63,30 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.my_model.updated_at, datetime)
 
     def testSave(self):
-        ''' Test for save function '''
+        ''' Test for save method '''
         self.my_model.first_name = 'brayan'
         self.my_model.save()
         dic = self.my_model.to_dict()
         self.assertEqual(dic['first_name'], 'brayan')
 
+    def test_save_1(self):
+        ''' Test save method '''
+        self.my_model.first_name = 'brayan'
+        self.my_model.save()
+
+        self.assertIsInstance(self.my_model.id, str)
+        self.assertIsInstance(self.my_model.created_at, datetime)
+        self.assertIsInstance(self.my_model.updated_at, datetime)
+
+        dic1 = self.my_model.to_dict()
+
+        self.my_model.first_name = 'felipe'
+        self.my_model.save()
+
+        dic2 = self.my_model.to_dict()
+
+        self.assertEqual(dic1['created_at'], dic2['created_at'])
+        self.assertNotEqual(dic1['updated_at'], dic2['updated_at'])
 
     def test_pep8_conformance(self):
         '''Test that we conform to PEP8.'''
