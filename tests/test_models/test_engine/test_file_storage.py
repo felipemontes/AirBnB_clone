@@ -25,6 +25,59 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(str(type(obj)),
                          "<class 'models.base_model.BaseModel'>")
 
+    def test_empty(self):
+        """ Test empty file """
+        self.assertEqual(storage.all(), {})
+
+    def test_create_basemodel(self):
+        """ Test create basemodel"""
+        obj = BaseModel()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_user(self):
+        """ Test create User """
+        obj = User()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_city(self):
+        """ Test create City """
+        obj = City()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_amenity(self):
+        """ Test create Amenity """
+        obj = Amenity()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_place(self):
+        """ Test create Place """
+        obj = Place()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_review(self):
+        """ Test create Review """
+        obj = Review()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
+    def test_create_state(self):
+        """ Test create State """
+        obj = State()
+        key = obj.__class__.__name__ + '.' + obj.id
+        dic = {key: obj}
+        self.assertEqual(storage.all(), dic)
+
     def test_input_1(self):
         """ Test no arguments """
         with self.assertRaises(TypeError):
