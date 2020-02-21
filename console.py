@@ -10,6 +10,8 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+from models.engine.file_storage import FileStorage
+
 
 d_classes = {'BaseModel': BaseModel, 'User': User,
              'State': State, 'City': City,
@@ -78,52 +80,54 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     print('** no instance found **')
 
-    def do_all(self, arg):
-        '''Prints all string representation of all instances
-           based or not on the class name
-        '''
-        spl = split(arg)
-        l_objs = []
-        if not arg:
-            for v in storage.all().values():
-                l_objs.append(v.__str__())
-            print(l_objs)
-        elif spl[0] not in d_classes:
-            print("** class doesn't exist **")
-        else:
-            for k, v in storage.all().items():
-                if v.__class__ == eval(spl[0]):
-                    l_objs.append(v.__str__())
-            print(l_objs)
-
-    def do_update(self, arg):
-        '''Updates an instance based on the class name
-           and id by adding or updating attribute
-        '''
-        spl = split(arg)
-        if not arg:
-            print("** class name missing **")
-        elif spl[0] not in d_classes:
-            print("** class doesn't exist **")
-        elif len(spl) == 1:
-            print('** instance id missing **')
-        else:
-            key = spl[0] + '.' + spl[1]
-            if key not in storage.all():
-                print('** no instance found **')
-            elif len(spl) == 2:
-                print('** attribute name missing **')
-            elif len(spl) == 3:
-                print('** value missing **')
-            else:
-                for k, v in storage.all().items():
-                    setattr(storage.all()[key], spl[2], spl[3])
-                    storage.save()
-                return
-
     def emptyline(self):
         '''Nothing happens when there is a blank line'''
         pass
+
+    def precmd(self, arg):
+        """parses command input"""
+        if '.' in arg and '(' in arg and ')' in arg:
+            cls = arg.split('.')
+            cnd = cls[1].split('(')
+            args = cnd[1].split(')')
+            if cls[0] in d_classes and cnd[0]:
+                arg = cnd[0] + ' ' + cls[0] + ' ' + args[0]
+        return arg
+
+    def do_count(self, cls_name):
+        """counts number of instances of a class"""
+        count = 0
+        all_objs = storage.all()
+        for k, v in all_objs.items():
+            clss = k.split('.')
+            if clss[0] == cls_name:
+                count = count + 1
+        print(count)
+
+    def do_all(self, line):
+        """Prints all data instances, filtered by class (optional)"""
+
+        objList = []
+        storage = FileStorage()
+        storage.reload()
+        objs = storage.all()
+
+        try:
+            if len(line) != 0:
+                eval(line)
+
+        except NameError:
+            print("** class doesn't exist **")
+            return
+
+        for _, value in objs.items():
+            if len(line) != 0:
+                if type(value) is eval(line):
+                    objList.append(value)
+            else:
+                objList.append(value)
+        for i in objList:
+            print(i)
 
 if __name__ == '__main__':
     '''Console loop'''
